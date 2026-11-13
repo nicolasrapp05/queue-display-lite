@@ -1,0 +1,349 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  overflow: hidden;
+  cursor: none;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+}
+
+.tv-clickable,
+.tv-clickable * {
+  cursor: auto;
+}
+
+@keyframes call-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes call-block-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-call-enter {
+  animation: call-enter 0.8s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+}
+
+.tv-call-block--enter {
+  animation: call-block-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-call-enter,
+  .animate-fade-up,
+  .tv-call-block--enter,
+  .tv-call-frame--live {
+    animation: none;
+  }
+}
+
+@layer components {
+  [data-tv-theme='light'] {
+    color-scheme: light;
+    --tv-canvas: #f8f9fb;
+    --tv-ink: #111318;
+    --tv-muted: #6b7280;
+    --tv-subtle: #9ca3af;
+    --tv-panel: #ffffff;
+    --tv-panel-border: #e4e7ec;
+    --tv-surface-elevated: #f1f3f6;
+    --tv-accent: #4f5bd5;
+    --tv-accent-muted: #353f8c;
+    --tv-call-block: #353f8c;
+    --tv-call-number: #ffffff;
+  }
+
+  [data-tv-theme='dark'] {
+    color-scheme: dark;
+    --tv-canvas: #0c0e12;
+    --tv-ink: #eceef2;
+    --tv-muted: #9ca3af;
+    --tv-subtle: #6b7280;
+    --tv-panel: #16181d;
+    --tv-panel-border: #2a2f3a;
+    --tv-surface-elevated: #1c2028;
+    --tv-accent: #7b8eff;
+    --tv-accent-muted: #a8b4ff;
+    --tv-call-block: #4f5bd5;
+    --tv-call-number: #ffffff;
+  }
+
+  .tv-root {
+    color: var(--tv-ink);
+    background-color: var(--tv-canvas);
+  }
+
+  [data-tv-theme='light'] .tv-root {
+    background-image:
+      radial-gradient(ellipse 90% 60% at 20% 0%, rgba(79, 91, 213, 0.06), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 100% 100%, rgba(79, 91, 213, 0.04), transparent 50%);
+  }
+
+  [data-tv-theme='dark'] .tv-root {
+    background-image:
+      radial-gradient(ellipse 90% 60% at 20% 0%, rgba(123, 142, 255, 0.07), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 100% 100%, rgba(123, 142, 255, 0.04), transparent 50%);
+  }
+
+  .tv-header {
+    border-color: var(--tv-panel-border);
+    background: color-mix(in srgb, var(--tv-panel) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .tv-panel {
+    border-color: var(--tv-panel-border);
+    background: var(--tv-panel);
+    box-shadow: 0 8px 32px -8px rgba(17, 19, 24, 0.12);
+  }
+
+  .tv-panel-footer {
+    border-color: var(--tv-panel-border);
+    background: var(--tv-surface-elevated);
+  }
+
+  .tv-text-muted { color: var(--tv-muted); }
+  .tv-text-subtle { color: var(--tv-subtle); }
+  .tv-accent { color: var(--tv-accent); }
+
+  .tv-chip {
+    background: var(--tv-canvas);
+    border-color: var(--tv-panel-border);
+    color: var(--tv-muted);
+  }
+
+  .tv-chip-active {
+    background: color-mix(in srgb, var(--tv-accent) 12%, transparent);
+    border-color: color-mix(in srgb, var(--tv-accent) 35%, transparent);
+    color: var(--tv-accent-muted);
+  }
+
+  .tv-overlay {
+    background: color-mix(in srgb, var(--tv-canvas) 96%, transparent);
+  }
+
+  button.tv-overlay {
+    border: 0;
+    padding: 0;
+    width: 100%;
+    color: inherit;
+    font: inherit;
+  }
+
+  .tv-waiting-ring {
+    border-color: var(--tv-panel-border);
+    background: var(--tv-surface-elevated);
+  }
+
+  .tv-call-display {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 0;
+    gap: 1rem;
+  }
+
+  .tv-call-label {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0.75rem 1rem 0.5rem;
+    text-align: center;
+    letter-spacing: 0.35em;
+    line-height: 1.2;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .tv-call-subtitle {
+    margin-top: 0.25rem;
+  }
+
+  .tv-call-block {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-height: 0;
+    max-height: 100%;
+    border-radius: 1rem;
+    background: var(--tv-call-block);
+    box-shadow: 0 8px 32px -8px rgba(17, 19, 24, 0.2);
+    overflow: hidden;
+    container-type: size;
+    container-name: ticket;
+  }
+
+  .tv-call-frame {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+    border-radius: 1rem;
+  }
+
+  .tv-call-frame--live {
+    animation: tv-call-glow 1.4s ease-in-out infinite;
+  }
+
+  @keyframes tv-call-glow {
+    0%,
+    100% {
+      box-shadow:
+        0 0 0 3px var(--tv-canvas),
+        0 0 22px 0 color-mix(in srgb, var(--tv-accent) 75%, var(--tv-canvas));
+    }
+    50% {
+      box-shadow:
+        0 0 0 5px var(--tv-canvas),
+        0 0 42px 8px color-mix(in srgb, var(--tv-accent) 85%, var(--tv-canvas));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tv-call-frame--live {
+      box-shadow:
+        0 0 0 5px var(--tv-canvas),
+        0 0 32px 6px color-mix(in srgb, var(--tv-accent) 75%, var(--tv-canvas));
+    }
+  }
+
+  .tv-password-slot {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 0;
+    padding-inline: 1.25rem;
+    overflow: hidden;
+  }
+
+  .tv-call-number {
+    color: var(--tv-call-number);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: min(80cqh, 58cqw, calc((100vh - 13rem) * 0.68));
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    transform-origin: center center;
+    user-select: none;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  .tv-clock {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tv-church-name {
+    font-family: Fraunces, Georgia, serif;
+  }
+
+  .tv-recent-column {
+    display: flex;
+    flex-direction: column;
+    width: clamp(18rem, 34vw, 38rem);
+    flex: 0 0 auto;
+    min-height: 0;
+  }
+
+  .tv-recent-title {
+    margin: 0;
+    padding: 1.35rem 1.25rem 0.85rem;
+    text-align: center;
+    font-size: clamp(0.85rem, 1.6vh, 1.15rem);
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--tv-subtle);
+  }
+
+  .tv-recent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.15rem 1.15rem 1.15rem;
+  }
+
+  .tv-recent-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0;
+    min-height: 0;
+    padding: 0.35rem 0.85rem;
+    border-radius: 1.15rem;
+    border: 1px solid var(--tv-panel-border);
+    background: var(--tv-canvas);
+    color: var(--tv-ink);
+    container-type: size;
+    overflow: hidden;
+  }
+
+  .tv-recent-card--active {
+    flex-grow: 1.25;
+    background: color-mix(in srgb, var(--tv-accent) 16%, var(--tv-panel));
+    border-color: color-mix(in srgb, var(--tv-accent) 48%, transparent);
+    color: var(--tv-accent-muted);
+    box-shadow: 0 14px 32px -18px color-mix(in srgb, var(--tv-accent) 80%, transparent);
+  }
+
+  .tv-recent-card__number {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: min(68cqh, calc(86cqw / (var(--len, 3) * 0.66)), 10rem);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  .tv-recent-empty {
+    flex: 1 1 auto;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--tv-subtle);
+    font-size: clamp(1.25rem, 2.4vh, 1.8rem);
+  }
+}

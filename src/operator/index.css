@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --background: 220 20% 98%;
+    --foreground: 225 15% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 225 15% 8%;
+    --primary: 234 58% 57%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 225 12% 18%;
+    --muted: 220 14% 94%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 220 14% 92%;
+    --accent-foreground: 225 15% 8%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 160 94% 25%;
+    --success-foreground: 0 0% 100%;
+    --signal: 32 95% 38%;
+    --signal-foreground: 225 15% 8%;
+    --border: 220 13% 90%;
+    --input: 220 13% 90%;
+    --ring: 234 58% 57%;
+    --radius: 0.75rem;
+    --canvas-warm: #f8f9fb;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --background: 225 20% 6%;
+    --foreground: 220 15% 93%;
+    --card: 222 14% 10%;
+    --card-foreground: 220 15% 93%;
+    --primary: 234 80% 74%;
+    --primary-foreground: 225 20% 6%;
+    --secondary: 222 12% 14%;
+    --secondary-foreground: 220 15% 90%;
+    --muted: 222 12% 14%;
+    --muted-foreground: 220 9% 58%;
+    --accent: 222 12% 16%;
+    --accent-foreground: 220 15% 90%;
+    --destructive: 0 62% 62%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 160 60% 52%;
+    --success-foreground: 225 20% 6%;
+    --signal: 43 96% 56%;
+    --signal-foreground: 225 20% 6%;
+    --border: 222 10% 20%;
+    --input: 222 10% 20%;
+    --ring: 234 80% 74%;
+    --canvas-warm: #0c0e12;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased font-sans;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(234 58% 57% / 0.05), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(234 58% 57% / 0.03), transparent);
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(234 80% 74% / 0.07), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(234 80% 74% / 0.04), transparent);
+  }
+}
+
+@layer components {
+  .page-eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.22em] text-primary;
+  }
+
+  .page-title {
+    @apply font-display text-2xl font-bold tracking-tight text-foreground;
+  }
+
+  .section-card {
+    @apply rounded-xl border border-border bg-card p-5 shadow-ticket;
+  }
+
+  .ticket-surface {
+    @apply relative rounded-xl border border-border bg-card shadow-ticket-lg overflow-hidden;
+  }
+
+  .ticket-notch {
+    background-image: radial-gradient(circle at 8px 0, var(--canvas-warm) 5px, transparent 5px);
+    background-size: 16px 10px;
+    background-repeat: repeat-x;
+    height: 10px;
+    width: 100%;
+  }
+
+  .dark .ticket-notch {
+    background-image: radial-gradient(circle at 8px 0, hsl(225 20% 6%) 5px, transparent 5px);
+  }
+
+  .admin-nav-active {
+    @apply text-white border shadow-sm;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .admin-nav-idle {
+    @apply border border-transparent;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .admin-nav-idle:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .kbd-hint {
+    @apply inline-flex items-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground;
+  }
+
+  .toast-success {
+    @apply bg-primary text-primary-foreground shadow-ticket-lg;
+  }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.3s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up {
+    animation: none;
+  }
+}
